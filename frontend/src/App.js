@@ -6,7 +6,7 @@ import './App.css';
 import FileUpload from './components/FileUpload';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('invoices');
+  const [activeTab, setActiveTab] = useState('fileupload');
 
   return (
     <div className="app-container">

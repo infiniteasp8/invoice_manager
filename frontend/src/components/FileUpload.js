@@ -10,6 +10,7 @@ const FileUpload = () => {
   // Handle file selection
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    document.getElementById("showFileName").innerHTML = file && file.name;
   };
 
   // Handle file upload
@@ -30,14 +31,14 @@ const FileUpload = () => {
 
     try {
       // Send file to backend
-      const response = await axios.post("http://localhost:3000/upload", formData, {
+      const response = await axios.post("http://localhost:4000/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
       setExtractedData(response.data.extractedData);
-      
+
     } catch (err) {
       setError("An error occurred while processing the file.");
       console.error(err);
@@ -47,18 +48,22 @@ const FileUpload = () => {
   };
 
   return (
-    <div style={{ maxWidth: "600px", margin: "20px auto", textAlign: "center" }}>
+    <div className="fileUploadContainer">
       <h1>Invoice File Upload</h1>
       <form onSubmit={handleFileUpload}>
-        <input type="file" onChange={handleFileChange} />
-        <button type="submit" style={{ marginLeft: "10px" }}>
-          Upload
-        </button>
+        <div className="uploadFormContainer">
+          <div className="inputFile">
+            <i className="fas fa-upload custom-upload-icon custom-upload-button"></i>
+            <input type="file" name="invoiceFile" value="" className="file-input" onChange={handleFileChange} />
+          </div>
+          <button type="submit" className="fileUploadButton"> Upload </button>
+          <div id="showFileName"></div>
+        </div>
       </form>
 
       {loading && <p>Processing file... Please wait.</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-    
+
       {extractedData && (
         <div style={{ marginTop: "20px", textAlign: "left" }}>
           <h2>Extracted Data</h2>

@@ -10,7 +10,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { GoogleAIFileManager } = require("@google/generative-ai/server");
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 // Middleware
 app.use(cors());
