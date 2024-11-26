@@ -1,0 +1,44 @@
+.app-container {
+  padding: 20px;
+}
+
+.tab-navigation {
+  margin-bottom: 20px;
+}
+
+.tab-navigation button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.tab-navigation button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab-container {
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
