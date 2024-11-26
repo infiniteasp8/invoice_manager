@@ -4,13 +4,22 @@ import ProductsTab from './components/ProductsTab';
 import CustomersTab from './components/CustomersTab';
 import './App.css';
 import FileUpload from './components/FileUpload';
+import { useSelector } from 'react-redux';
 
 function App() {
   const [activeTab, setActiveTab] = useState('fileupload');
+  const isUploaded = useSelector(state => state.fileUploaded);
 
+  console.log(isUploaded);
+
+  if(isUploaded){
+    const target = document.getElementById('tab-navigation');
+    target && target.style.removeProperty('display');
+  }
+  
   return (
     <div className="app-container">
-      <nav className="tab-navigation">
+      <nav id='tab-navigation' className="tab-navigation" style={{display: 'none'}}>
       <button 
           className={activeTab === 'fileupload' ? 'active' : ''} 
           onClick={() => setActiveTab('fileupload')}

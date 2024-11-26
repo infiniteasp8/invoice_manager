@@ -95,6 +95,7 @@ tr:nth-child(even) {
   border-radius: 10px;
   background-color: #8b8a8a;
   margin-left: 10px;
+  cursor: pointer;
 }
 
 .uploadFormContainer{

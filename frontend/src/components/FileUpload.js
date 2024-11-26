@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {useDispatch} from 'react-redux';
+import { addFile } from "../features/user/userSlice";
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
   const [extractedData, setExtractedData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   // Handle file selection
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    document.getElementById("showFileName").innerHTML = file && file.name;
+    const inputFile = e.target.files[0];
+    document.getElementById("showFileName").innerHTML = inputFile && inputFile.name;
+    setFile(inputFile);
   };
 
   // Handle file upload
@@ -37,6 +41,7 @@ const FileUpload = () => {
         },
       });
 
+      dispatch(addFile(response.data.extractedData));
       setExtractedData(response.data.extractedData);
 
     } catch (err) {
