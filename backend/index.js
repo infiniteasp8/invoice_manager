@@ -60,16 +60,35 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   
       // Extract the summary text
       const response = result.response.text();
-  
-      console.log("Gemini Response:", response);
+      const jsonStartIndex = response.indexOf('{');
+      const jsonEndIndex = response.lastIndexOf('}');
+
+      if (jsonStartIndex === -1 || jsonEndIndex === -1) {
+          throw new Error("JSON content not found in the response");
+      }
+
+      const jsonString = response.substring(jsonStartIndex, jsonEndIndex + 1);
+
+      // Step 3: Parse the extracted JSON
+      const jsonData = JSON.parse(jsonString);
+
+    //   // Step 4: Use the parsed JSON object
+    //   console.log("Extracted JSON:", JSON.stringify(jsonData, null, 2));
+    //   console.log("Invoice Number:", jsonData.invoiceDetails.invoiceDetails);
+    //   console.log("Consignee:", jsonData.invoiceDetails.consignee);
+    //   console.log("Total Amount:", jsonData.invoiceDetails.totalAmount);
+
+      // Return JSON for further processing if needed
+    //   return jsonData;
+    //   console.log("Gemini Response:", response);
   
       // Clean up uploaded file
       fs.unlinkSync(filePath);
-  
+      console.log(jsonData);
       // Send response to frontend
       res.json({
         success: true,
-        summary: response,
+        summary: jsonData,
       });
     } catch (err) {
       console.error("Error processing file:", err);

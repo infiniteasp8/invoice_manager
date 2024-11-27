@@ -1,14 +1,17 @@
+import { useSelector } from "react-redux";
+
 function ProductsTab() {
-    const products = [
-      {
-        name: 'Widget X',
-        quantity: 100,
-        unitPrice: 100,
-        tax: 10,
-        discount: 5
-      },
-      // Add more sample data as needed
-    ];
+    const products = useSelector(state => state.products.products)
+    // console.log(values)
+    // const products = [
+    //   {
+    //     name: 'Widget X',
+    //     quantity: 100,
+    //     unitPrice: 100,
+    //     tax: 10,
+    //   },
+    //   // Add more sample data as needed
+    // ];
   
     return (
       <div className="tab-container">
@@ -21,18 +24,16 @@ function ProductsTab() {
               <th>Unit Price</th>
               <th>Tax (%)</th>
               <th>Price with Tax</th>
-              <th>Discount (%)</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product) => (
               <tr key={product.name}>
-                <td>{product.name}</td>
+                <td>{product.productName}</td>
                 <td>{product.quantity}</td>
                 <td>${product.unitPrice}</td>
                 <td>{product.tax}%</td>
                 <td>${product.unitPrice * (1 + product.tax/100)}</td>
-                <td>{product.discount}%</td>
               </tr>
             ))}
           </tbody>

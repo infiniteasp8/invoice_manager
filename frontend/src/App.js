@@ -10,16 +10,17 @@ import Navbar from './components/Navbar';
 function App() {
   const [activeTab, setActiveTab] = useState('fileupload');
   const isUploaded = useSelector(state => state.user.fileUploaded);
+  console.log(isUploaded)
 
-  if(isUploaded){
-    const target = document.getElementById('tab-navigation');
-    target && target.style.removeProperty('display');
-  }
+  // if(isUploaded){
+  //   const target = document.getElementById('tab-navigation');
+  //   target && target.style.removeProperty('display');
+  // }
   
   return (
     <div className="app-container">
       <Navbar />
-      <nav id='tab-navigation' className="tab-navigation" style={{display: 'none'}}>
+      <nav id='tab-navigation' className="tab-navigation"  style={{ display: isUploaded ? "block" : "none" }}>
       <button 
           className={activeTab === 'fileupload' ? 'active' : ''} 
           onClick={() => setActiveTab('fileupload')}

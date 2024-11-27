@@ -3,10 +3,12 @@ import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { addFile } from "../features/user/userSlice";
 import { updateInvoices } from "../features/user/invoicesSlice";
+import { updateCustomer } from "../features/user/customersSlice";
+import { addProduct } from "../features/user/productsSlice";
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
-  const [extractedData, setExtractedData] = useState(null);
+  // const [extractedData, setExtractedData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -31,7 +33,7 @@ const FileUpload = () => {
 
     setError(null);
     setLoading(true);
-    setExtractedData(null);
+    // setExtractedData(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -44,14 +46,37 @@ const FileUpload = () => {
         },
       });
 
-      dispatch(addFile(response.data.extractedData));
+
+      const extractedValues = response.data.summary;
+      dispatch(addFile());
+
       dispatch(updateInvoices({
-          serialNumber: 'dsfsdf',
-          customerName: 'dfsdf',
-          totalAmount: '1000',
-          date: '2024-03-20',
+        serialNumber: extractedValues.InvoicesTab.serialNumber,
+        customerName: extractedValues.InvoicesTab.customerName,
+        totalAmount: extractedValues.InvoicesTab.totalAmount,
+        date: extractedValues.InvoicesTab.date,
       }));
-      setExtractedData(response.data.extractedData);
+
+      dispatch(updateCustomer({
+        customerName: extractedValues.CustomersTab.customerName,
+        phoneNumber: extractedValues.CustomersTab.phoneNumber,
+        address: extractedValues.CustomersTab.address,
+      }));
+
+      const products = extractedValues.ProductsTab;
+      products.map(product => {
+        dispatch(addProduct({
+          productName: product.productName,
+          quantity: product.quantity,
+          unitPrice: product.unitPrice,
+          tax: product.tax
+        }
+        ))
+      })
+
+      // setExtractedData(extractedValues);
+      // console.log(response.data.summary);
+      console.log(localStorage.getItem('user'));
 
     } catch (err) {
       setError("An error occurred while processing the file.");
@@ -63,7 +88,7 @@ const FileUpload = () => {
 
   return (
     <div className="fileUploadContainer">
-      <h1>Invoice File Upload</h1>
+      <h2>Invoice File Upload</h2>
       <form onSubmit={handleFileUpload}>
         <div className="uploadFormContainer">
           <div className="inputFile">
@@ -78,14 +103,14 @@ const FileUpload = () => {
       {loading && <p>Processing file... Please wait.</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {extractedData && (
+      {/* {extractedData && (
         <div style={{ marginTop: "20px", textAlign: "left" }}>
           <h2>Extracted Data</h2>
           <pre style={{ background: "#f4f4f4", padding: "10px" }}>
             {JSON.stringify(extractedData, null, 2)}
           </pre>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

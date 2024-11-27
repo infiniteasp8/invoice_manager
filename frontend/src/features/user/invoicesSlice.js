@@ -1,10 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    serialNumber : '',
-    customerName: '',
-    totalAmount: '',
-    date: ''
+    invoices:JSON.parse(localStorage.getItem("invoices")) || []
 }
 
 export const invoicesSlice = createSlice({
@@ -12,10 +9,8 @@ export const invoicesSlice = createSlice({
     initialState,
     reducers:{
         updateInvoices:(state, action) =>{
-            state.serialNumber = action.payload.serialNumber;
-            state.customerName = action.payload.customerName;
-            state.totalAmount = action.payload.totalAmount;
-            state.date = action.payload.date;
+            state.invoices.push(action.payload);
+            localStorage.setItem("invoices", JSON.stringify(state.invoices));
         }
     }
 })
