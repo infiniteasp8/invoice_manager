@@ -1,13 +1,16 @@
+import { useSelector } from 'react-redux';
+
 function InvoicesTab() {
+    const values = useSelector(state => state.invoices);
     const invoices = [
       {
-        serialNumber: 'INV001',
-        customerName: 'John Doe',
+        serialNumber: values.serialNumber,
+        customerName: values.customerName,
         productName: 'Widget X',
         quantity: 5,
         tax: 10,
-        totalAmount: 550,
-        date: '2024-03-20'
+        totalAmount: values.totalAmount,
+        date: values.date,
       },
       // Add more sample data as needed
     ];

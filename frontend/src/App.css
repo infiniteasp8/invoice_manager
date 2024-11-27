@@ -105,3 +105,29 @@ tr:nth-child(even) {
   flex-direction: column;
   gap: 10px;
 }
+
+/* Navbar */
+.navbar{
+  background-color: #333436;
+  display: flex;
+  height: 70px;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.title{
+  margin-left: 20px;
+}
+
+.userLogo{
+  display: flex;
+  background-color: white;
+  border-radius: 50%;
+  width: 40px;
+  border: 3px solid grey;
+  height: 40px;
+  margin-left: 85%;
+  align-items: center;
+  justify-content: center;
+}

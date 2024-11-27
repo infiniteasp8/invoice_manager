@@ -5,7 +5,7 @@ const initialState ={
 }
 
 export const userSlice = createSlice({
-    name: 'uploadDone',
+    name: 'user',
     initialState,
     reducers:{
         addFile:(state)=>{

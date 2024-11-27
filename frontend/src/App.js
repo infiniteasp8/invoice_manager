@@ -5,12 +5,11 @@ import CustomersTab from './components/CustomersTab';
 import './App.css';
 import FileUpload from './components/FileUpload';
 import { useSelector } from 'react-redux';
+import Navbar from './components/Navbar';
 
 function App() {
   const [activeTab, setActiveTab] = useState('fileupload');
-  const isUploaded = useSelector(state => state.fileUploaded);
-
-  console.log(isUploaded);
+  const isUploaded = useSelector(state => state.user.fileUploaded);
 
   if(isUploaded){
     const target = document.getElementById('tab-navigation');
@@ -19,6 +18,7 @@ function App() {
   
   return (
     <div className="app-container">
+      <Navbar />
       <nav id='tab-navigation' className="tab-navigation" style={{display: 'none'}}>
       <button 
           className={activeTab === 'fileupload' ? 'active' : ''} 
@@ -46,6 +46,7 @@ function App() {
         </button>
       </nav>
 
+      
       <div className="tab-content">
         {activeTab === 'fileupload' && <FileUpload />}
         {activeTab === 'invoices' && <InvoicesTab />}

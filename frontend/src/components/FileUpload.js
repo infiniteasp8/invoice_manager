@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addFile } from "../features/user/userSlice";
+import { updateInvoices } from "../features/user/invoicesSlice";
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
@@ -10,9 +11,11 @@ const FileUpload = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
+
   // Handle file selection
   const handleFileChange = (e) => {
     const inputFile = e.target.files[0];
+    document.getElementById("fileUploadButton").style.backgroundColor = '#007bff';
     document.getElementById("showFileName").innerHTML = inputFile && inputFile.name;
     setFile(inputFile);
   };
@@ -42,6 +45,12 @@ const FileUpload = () => {
       });
 
       dispatch(addFile(response.data.extractedData));
+      dispatch(updateInvoices({
+          serialNumber: 'dsfsdf',
+          customerName: 'dfsdf',
+          totalAmount: '1000',
+          date: '2024-03-20',
+      }));
       setExtractedData(response.data.extractedData);
 
     } catch (err) {
@@ -61,7 +70,7 @@ const FileUpload = () => {
             <i className="fas fa-upload custom-upload-icon custom-upload-button"></i>
             <input type="file" name="invoiceFile" value="" className="file-input" onChange={handleFileChange} />
           </div>
-          <button type="submit" className="fileUploadButton"> Upload </button>
+          <button id="fileUploadButton" type="submit" className="fileUploadButton"> Upload </button>
           <div id="showFileName"></div>
         </div>
       </form>
