@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState ={
-    fileUploaded: false
+    fileUploaded: JSON.parse(localStorage.getItem("user")) || false,
 }
 
 export const userSlice = createSlice({
@@ -10,6 +10,7 @@ export const userSlice = createSlice({
     reducers:{
         addFile:(state)=>{
            state.fileUploaded = true;
+           localStorage.setItem("user",JSON.stringify(true));
         }
     }
 })
