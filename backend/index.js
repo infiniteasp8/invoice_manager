@@ -10,7 +10,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { GoogleAIFileManager } = require("@google/generative-ai/server");
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 // Middleware
 app.use(cors());
@@ -84,7 +84,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   
       // Clean up uploaded file
       fs.unlinkSync(filePath);
-  
+      console.log(jsonData);
       // Send response to frontend
       res.json({
         success: true,

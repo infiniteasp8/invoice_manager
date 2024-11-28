@@ -1,0 +1,54 @@
+{
+    "InvoicesTab": 
+      {
+        "serialNumber": 1,
+        "customerName": "Shounak",
+        "productName": "GEMS CHOCLATE POUCH",
+        "quantity": 1000,
+        "totalAmount": 5000.00,
+        "date": "2024-11-12"
+      },
+    "ProductsTab": [
+      {
+        "productName": "GEMS CHOCLATE POUCH",
+        "quantity": 1000,
+        "unitPrice": 4.7619,
+        "priceWithTax": 5000.00,
+        "discount": 0.00
+      },
+      {
+        "productName": "TREAT BKS CASE 80PKT",
+        "quantity": 50,
+        "unitPrice": 535.7143,
+        "priceWithTax": 30000.00,
+        "discount": 0.00
+      },
+      {
+        "productName": "NUTRI CHOICE BKS CASE",
+        "quantity": 25,
+        "unitPrice": 666.6667,
+        "priceWithTax": 17500.00,
+        "discount": 0.00
+      },
+      {
+        "productName": "MILK BIKIS CLASSIC CASE 120PK",
+        "quantity": 20,
+        "unitPrice": 809.5238,
+        "priceWithTax": 17000.00,
+        "discount": 0.00
+      }
+    ],
+    "CustomersTab": [
+      {
+        "customerName": "Shounak",
+        "phoneNumber": "+91 9999999999",
+        "address": "KAhriri"
+      },
+      {
+        "customerName": "Amit",
+        "phoneNumber": "+91 9876543210",
+        "address": "KAhriri"
+      }
+    ]
+}
+  
