@@ -24,9 +24,9 @@ function CustomersTab() {
           <tbody>
             {customers.map((customer) => (
               <tr key={customer.customerName}>
-                <td>{customer.customerName}</td>
-                <td>{customer.phoneNumber}</td>
-                <td>{customer.address}</td>
+                <td>{customer.customerName ===''?'Not provided':customer.customerName}</td>
+                <td>{customer.phoneNumber ===''?'Not provided':customer.phoneNumber}</td>
+                <td>{customer.address===''?'Not provided':customer.address}</td>
               </tr>
             ))}
           </tbody>

@@ -29,11 +29,11 @@ function ProductsTab() {
           <tbody>
             {products.map((product) => (
               <tr key={product.name}>
-                <td>{product.productName}</td>
-                <td>{product.quantity}</td>
-                <td>${product.unitPrice}</td>
-                <td>{product.tax}%</td>
-                <td>${product.unitPrice * (1 + product.tax/100)}</td>
+                <td>{product.productName===''?'Not provided':product.productName}</td>
+                <td>{product.quantity===''?'Not provided':product.quantity}</td>
+                <td>{product.unitPrice===''?'Not provided':product.unitPrice}</td>
+                <td>{product.tax===''?18:product.tax}</td>
+                <td>{product.unitPrice * (1 + (product.tax===''?18:product.tax)/100)}</td>
               </tr>
             ))}
           </tbody>
