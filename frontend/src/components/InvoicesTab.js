@@ -27,10 +27,10 @@ function InvoicesTab() {
           <tbody>
             {invoices.map((invoice) => (
               <tr key={invoice.serialNumber}>
-                <td>{invoice.serialNumber}</td>
-                <td>{invoice.customerName}</td>
-                <td>${invoice.totalAmount}</td>
-                <td>{invoice.date}</td>
+                <td>{invoice.serialNumber===''?'Not provided':invoice.serialNumber}</td>
+                <td>{invoice.customerName===''?'Not provided':invoice.customerName}</td>
+                <td>{invoice.totalAmount===''?'Not provided':invoice.totalAmount}</td>
+                <td>{invoice.date===''?'Not provided':invoice.date}</td>
               </tr>
             ))}
           </tbody>

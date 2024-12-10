@@ -5,6 +5,8 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
+const bodyParser = require('body-parser');
+const { Pool } = require('pg');
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { GoogleAIFileManager } = require("@google/generative-ai/server");
@@ -12,9 +14,24 @@ const { GoogleAIFileManager } = require("@google/generative-ai/server");
 const app = express();
 const PORT = 4000;
 
+app.use(bodyParser.json());
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+
+// PostgreSQL connection setup
+const pool = new Pool({
+  user: 'postgres',      // Replace with your PostgreSQL username
+  host: 'localhost',          // Replace with your PostgreSQL host
+  database: 'invoicer',  // Replace with your PostgreSQL database name
+  password: 'pnsql',  // Replace with your PostgreSQL password
+  port: 5432,                 // Default PostgreSQL port
+});
+
+
+
 
 // Multer setup for file uploads
 const upload = multer({ dest: "uploads/" });
@@ -71,16 +88,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 
       // Step 3: Parse the extracted JSON
       const jsonData = JSON.parse(jsonString);
-
-    //   // Step 4: Use the parsed JSON object
-    //   console.log("Extracted JSON:", JSON.stringify(jsonData, null, 2));
-    //   console.log("Invoice Number:", jsonData.invoiceDetails.invoiceDetails);
-    //   console.log("Consignee:", jsonData.invoiceDetails.consignee);
-    //   console.log("Total Amount:", jsonData.invoiceDetails.totalAmount);
-
-      // Return JSON for further processing if needed
-    //   return jsonData;
-    //   console.log("Gemini Response:", response);
   
       // Clean up uploaded file
       fs.unlinkSync(filePath);
@@ -98,6 +105,98 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       });
     }
   });
+
+  // Route to store data in the database
+app.post('/store-invoices', async (req, res) => {
+  console.log('Request body:', req.body);
+  const { serialNumber, customerName, totalAmount, date } = req.body;
+
+  try {
+    const query = `
+      INSERT INTO invoices ("serialNumber", "customerName", "totalAmount", "date")
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const values = [serialNumber, customerName, totalAmount, date];
+
+    const result = await pool.query(query, values);
+    res.status(201).json({
+      message: 'Data inserted successfully',
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error('Error inserting data:', error);
+    res.status(500).json({ error: 'Failed to insert data' });
+  }
+});
+
+app.post('/store-customers', async (req, res) => {
+  console.log('Request body:', req.body);
+  const { customerName, phoneNumber, address , serialNumber} = req.body;
+
+  try {
+    const query = `
+      INSERT INTO customers ("customerName", "phoneNumber", "address", "serialNumber")
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const values = [customerName, phoneNumber, address , serialNumber];
+
+    const result = await pool.query(query, values);
+    res.status(201).json({
+      message: 'Data inserted successfully',
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error('Error inserting data:', error);
+    res.status(500).json({ error: 'Failed to insert data' });
+  }
+});
+
+app.post('/store-products', async (req, res) => {
+  console.log('Request body:', req.body);
+
+  let { productName, quantity, unitPrice, tax, serialNumber } = req.body;
+
+  // Check if quantity, unitPrice, and tax are valid numbers
+  if (
+    isNaN(quantity) || 
+    isNaN(unitPrice) || 
+    isNaN(tax) ||
+    quantity === "" || 
+    unitPrice === "" || 
+    tax === ""
+  ) {
+    return res.status(400).json({ error: 'Invalid data: quantity, unitPrice, and tax must be valid numbers' });
+  }
+
+  // Parse quantity, unitPrice, and tax to ensure they are numbers
+  quantity = parseFloat(quantity);
+  unitPrice = parseFloat(unitPrice);
+  tax = parseFloat(tax);
+
+  const query = `
+    INSERT INTO products ("productName", "quantity", "unitPrice", "tax", "serialNumber")
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;
+  `;
+
+  try {
+    // Using the query with proper parameter placeholders ($1, $2, $3, $4, $5)
+    const values = [productName, quantity, unitPrice, tax, serialNumber];
+    const result = await pool.query(query, values);
+
+    res.status(201).json({
+      message: 'Product inserted successfully',
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error('Error inserting product:', error);
+    res.status(500).json({ error: 'Failed to insert product' });
+  }
+});
+
+
   
 
 // Start server
