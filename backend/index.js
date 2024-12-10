@@ -1,12 +1,12 @@
 require("dotenv").config();
 const express = require("express");
-const multer = require("multer"); // Fixed typo: "mulr" to "multer"
+const multer = require("multer"); 
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 const bodyParser = require('body-parser');
-const { Pool } = require('pg');
+// const { Pool } = require('pg');
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { GoogleAIFileManager } = require("@google/generative-ai/server");
@@ -22,13 +22,13 @@ app.use(express.json());
 
 
 // PostgreSQL connection setup
-const pool = new Pool({
-  user: 'postgres',      // Replace with your PostgreSQL username
-  host: 'localhost',          // Replace with your PostgreSQL host
-  database: 'invoicer',  // Replace with your PostgreSQL database name
-  password: DB_Pass,  // Replace with your PostgreSQL password
-  port: 5432,                 // Default PostgreSQL port
-});
+// const pool = new Pool({
+//   user: 'postgres',      
+//   host: 'localhost',  
+//   database: 'invoicer', 
+//   password: process.env.DB_Pass,  
+//   port: 5432,               
+// });
 
 
 
@@ -55,7 +55,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     }
   
     try {
-      // Ensure the file path is correct and valid
       const filePath = path.resolve(file.path); // Absolute path to the file
   
       // Upload the file to GoogleAIFileManager
@@ -107,94 +106,94 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   });
 
   // Route to store data in the database
-app.post('/store-invoices', async (req, res) => {
-  console.log('Request body:', req.body);
-  const { serialNumber, customerName, totalAmount, date } = req.body;
+// app.post('/store-invoices', async (req, res) => {
+//   console.log('Request body:', req.body);
+//   const { serialNumber, customerName, totalAmount, date } = req.body;
 
-  try {
-    const query = `
-      INSERT INTO invoices ("serialNumber", "customerName", "totalAmount", "date")
-      VALUES ($1, $2, $3, $4)
-      RETURNING *;
-    `;
-    const values = [serialNumber, customerName, totalAmount, date];
+//   try {
+//     const query = `
+//       INSERT INTO invoices ("serialNumber", "customerName", "totalAmount", "date")
+//       VALUES ($1, $2, $3, $4)
+//       RETURNING *;
+//     `;
+//     const values = [serialNumber, customerName, totalAmount, date];
 
-    const result = await pool.query(query, values);
-    res.status(201).json({
-      message: 'Data inserted successfully',
-      data: result.rows[0],
-    });
-  } catch (error) {
-    console.error('Error inserting data:', error);
-    res.status(500).json({ error: 'Failed to insert data' });
-  }
-});
+//     const result = await pool.query(query, values);
+//     res.status(201).json({
+//       message: 'Data inserted successfully',
+//       data: result.rows[0],
+//     });
+//   } catch (error) {
+//     console.error('Error inserting data:', error);
+//     res.status(500).json({ error: 'Failed to insert data' });
+//   }
+// });
 
-app.post('/store-customers', async (req, res) => {
-  console.log('Request body:', req.body);
-  const { customerName, phoneNumber, address , serialNumber} = req.body;
+// app.post('/store-customers', async (req, res) => {
+//   console.log('Request body:', req.body);
+//   const { customerName, phoneNumber, address , serialNumber} = req.body;
 
-  try {
-    const query = `
-      INSERT INTO customers ("customerName", "phoneNumber", "address", "serialNumber")
-      VALUES ($1, $2, $3, $4)
-      RETURNING *;
-    `;
-    const values = [customerName, phoneNumber, address , serialNumber];
+//   try {
+//     const query = `
+//       INSERT INTO customers ("customerName", "phoneNumber", "address", "serialNumber")
+//       VALUES ($1, $2, $3, $4)
+//       RETURNING *;
+//     `;
+//     const values = [customerName, phoneNumber, address , serialNumber];
 
-    const result = await pool.query(query, values);
-    res.status(201).json({
-      message: 'Data inserted successfully',
-      data: result.rows[0],
-    });
-  } catch (error) {
-    console.error('Error inserting data:', error);
-    res.status(500).json({ error: 'Failed to insert data' });
-  }
-});
+//     const result = await pool.query(query, values);
+//     res.status(201).json({
+//       message: 'Data inserted successfully',
+//       data: result.rows[0],
+//     });
+//   } catch (error) {
+//     console.error('Error inserting data:', error);
+//     res.status(500).json({ error: 'Failed to insert data' });
+//   }
+// });
 
-app.post('/store-products', async (req, res) => {
-  console.log('Request body:', req.body);
+// app.post('/store-products', async (req, res) => {
+//   console.log('Request body:', req.body);
 
-  let { productName, quantity, unitPrice, tax, serialNumber } = req.body;
+//   let { productName, quantity, unitPrice, tax, serialNumber } = req.body;
 
-  // Check if quantity, unitPrice, and tax are valid numbers
-  if (
-    isNaN(quantity) || 
-    isNaN(unitPrice) || 
-    isNaN(tax) ||
-    quantity === "" || 
-    unitPrice === "" || 
-    tax === ""
-  ) {
-    return res.status(400).json({ error: 'Invalid data: quantity, unitPrice, and tax must be valid numbers' });
-  }
+//   // Check if quantity, unitPrice, and tax are valid numbers
+//   if (
+//     isNaN(quantity) || 
+//     isNaN(unitPrice) || 
+//     isNaN(tax) ||
+//     quantity === "" || 
+//     unitPrice === "" || 
+//     tax === ""
+//   ) {
+//     return res.status(400).json({ error: 'Invalid data: quantity, unitPrice, and tax must be valid numbers' });
+//   }
 
-  // Parse quantity, unitPrice, and tax to ensure they are numbers
-  quantity = parseFloat(quantity);
-  unitPrice = parseFloat(unitPrice);
-  tax = parseFloat(tax);
+//   // Parse quantity, unitPrice, and tax to ensure they are numbers
+//   quantity = parseFloat(quantity);
+//   unitPrice = parseFloat(unitPrice);
+//   tax = parseFloat(tax);
 
-  const query = `
-    INSERT INTO products ("productName", "quantity", "unitPrice", "tax", "serialNumber")
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING *;
-  `;
+//   const query = `
+//     INSERT INTO products ("productName", "quantity", "unitPrice", "tax", "serialNumber")
+//     VALUES ($1, $2, $3, $4, $5)
+//     RETURNING *;
+//   `;
 
-  try {
-    // Using the query with proper parameter placeholders ($1, $2, $3, $4, $5)
-    const values = [productName, quantity, unitPrice, tax, serialNumber];
-    const result = await pool.query(query, values);
+//   try {
+//     // Using the query with proper parameter placeholders ($1, $2, $3, $4, $5)
+//     const values = [productName, quantity, unitPrice, tax, serialNumber];
+//     const result = await pool.query(query, values);
 
-    res.status(201).json({
-      message: 'Product inserted successfully',
-      data: result.rows[0],
-    });
-  } catch (error) {
-    console.error('Error inserting product:', error);
-    res.status(500).json({ error: 'Failed to insert product' });
-  }
-});
+//     res.status(201).json({
+//       message: 'Product inserted successfully',
+//       data: result.rows[0],
+//     });
+//   } catch (error) {
+//     console.error('Error inserting product:', error);
+//     res.status(500).json({ error: 'Failed to insert product' });
+//   }
+// });
 
 
   

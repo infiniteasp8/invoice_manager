@@ -79,83 +79,83 @@ const FileUpload = () => {
       console.log(localStorage.getItem('user'));
 
       // Insert into PostgreSQL immediately using extractedValues
-    try {
-      const dbResponse = await fetch('http://localhost:4000/store-invoices', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(extractedValues.InvoicesTab), // Use extractedValues directly
-      });
+    // try {
+    //   const dbResponse = await fetch('http://localhost:4000/store-invoices', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(extractedValues.InvoicesTab), // Use extractedValues directly
+    //   });
 
-      if (!dbResponse.ok) {
-        throw new Error('Failed to save invoice in the database');
-      }
+    //   if (!dbResponse.ok) {
+    //     throw new Error('Failed to save invoice in the database');
+    //   }
 
-      const dbData = await dbResponse.json();
-      console.log('Invoice saved to database:', dbData);
-    } catch (error) {
-      console.error('Database Error:', error);
-    }
+    //   const dbData = await dbResponse.json();
+    //   console.log('Invoice saved to database:', dbData);
+    // } catch (error) {
+    //   console.error('Database Error:', error);
+    // }
     
-    try {
-      const customers = extractedValues.CustomersTab; // Extract customer data
-      const serialNumber = extractedValues.InvoicesTab.serialNumber; // Extract serial number
+    // try {
+    //   const customers = extractedValues.CustomersTab; // Extract customer data
+    //   const serialNumber = extractedValues.InvoicesTab.serialNumber; // Extract serial number
     
-      const customerWithSerial = {
-        ...customers,
-        serialNumber, // Add serialNumber to customer data
-      };
+    //   const customerWithSerial = {
+    //     ...customers,
+    //     serialNumber, // Add serialNumber to customer data
+    //   };
     
-      const dbResponse = await fetch('http://localhost:4000/store-customers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(customerWithSerial), // Send customer data with serialNumber
-      });
+    //   const dbResponse = await fetch('http://localhost:4000/store-customers', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(customerWithSerial), // Send customer data with serialNumber
+    //   });
     
-      if (!dbResponse.ok) {
-        throw new Error('Failed to save customers in the database');
-      }
+    //   if (!dbResponse.ok) {
+    //     throw new Error('Failed to save customers in the database');
+    //   }
     
-      const dbData = await dbResponse.json();
-      console.log('Customers saved to database:', dbData);
-    } catch (error) {
-      console.error('Database Error:', error);
-    }
+    //   const dbData = await dbResponse.json();
+    //   console.log('Customers saved to database:', dbData);
+    // } catch (error) {
+    //   console.error('Database Error:', error);
+    // }
 
-    try {
-      const products = extractedValues.ProductsTab; // Extract the products array
-      const serialNumber = extractedValues.InvoicesTab.serialNumber; // Extract serial number
+    // try {
+    //   const products = extractedValues.ProductsTab; // Extract the products array
+    //   const serialNumber = extractedValues.InvoicesTab.serialNumber; // Extract serial number
     
-      for (const product of products) {
-        const productWithSerial = {
-          ...product,
-          serialNumber, // Add serialNumber to each product
-        };
+    //   for (const product of products) {
+    //     const productWithSerial = {
+    //       ...product,
+    //       serialNumber, // Add serialNumber to each product
+    //     };
 
-        const dbResponse = await fetch('http://localhost:4000/store-products', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(productWithSerial), // Send each product as a JSON object
-        });
+    //     const dbResponse = await fetch('http://localhost:4000/store-products', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify(productWithSerial), // Send each product as a JSON object
+    //     });
     
-        if (!dbResponse.ok) {
-          throw new Error('Failed to save product in the database');
-        }
+    //     if (!dbResponse.ok) {
+    //       throw new Error('Failed to save product in the database');
+    //     }
     
-        const dbData = await dbResponse.json();
-        console.log('Product saved to database:', dbData);
-      }
-    } catch (error) {
-      console.error('Database Error:', error);
-    }
+    //     const dbData = await dbResponse.json();
+    //     console.log('Product saved to database:', dbData);
+    //   }
+    // } catch (error) {
+    //   console.error('Database Error:', error);
+    // }
 
     } catch (err) {
-      setError("An error occurred while processing the file.");
+      setError(err.message);
       console.error(err);
     } finally {
       setLoading(false);
